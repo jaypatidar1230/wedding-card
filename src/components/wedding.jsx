@@ -15,8 +15,7 @@ import jsPDF from "jspdf";
 import { IoImageOutline } from "react-icons/io5";
 import { IoColorPaletteOutline } from "react-icons/io5";
 
-// Add a default background URL or base64 image
-const defaultBackground = "/images/floral.png";
+const defaultBackground = "data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23f0f0f0' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E";
 
 const WeddingInvitation = () => {
   const [fontSize, setFontSize] = useState("12.1");
@@ -44,16 +43,14 @@ const WeddingInvitation = () => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [showFontDropdown, setShowFontDropdown] = useState(false);
 
-  const backgroundOptions = [{ name: "Default", image: defaultBackground }];
+  const backgroundOptions = [{ name: "Default Pattern", image: defaultBackground }];
 
   const handleFocus = (e) => {
     const element = e.target;
     setSelectedElement(element);
 
-    // Get the computed style
     const computedStyle = window.getComputedStyle(element);
 
-    // Get the actual color from the element's style if it exists, otherwise from computed style
     const elementColor = element.style.color || computedStyle.color;
     const rgb = elementColor.match(/\d+/g);
     const hex = rgb
@@ -79,7 +76,7 @@ const WeddingInvitation = () => {
   };
 
   const handleToolbarClick = (e) => {
-    e.stopPropagation(); // Prevent toolbar clicks from closing color picker
+    e.stopPropagation();
   };
 
   const addToHistory = (element, property, oldValue, newValue) => {
@@ -103,7 +100,6 @@ const WeddingInvitation = () => {
     if (oldValue !== newValue) {
       addToHistory(element, "value", oldValue, newValue);
       element.defaultValue = newValue;
-      // Update preview after input change
       updatePreview();
     }
   };
@@ -111,19 +107,15 @@ const WeddingInvitation = () => {
   const handleStyleChange = (element, property, oldValue, newValue) => {
     if (!element) return;
 
-    // Apply the style directly to the element
     element.style[property] = newValue;
 
-    // Update the textStyle state
     setTextStyle((prev) => ({
       ...prev,
       [property]: newValue,
     }));
 
-    // Add to history
     addToHistory(element, property, oldValue, newValue);
 
-    // Update preview
     updatePreview();
   };
 
@@ -173,15 +165,13 @@ const WeddingInvitation = () => {
       ".max-w-md.mx-auto.bg-white"
     );
 
-    // Create a clone of the invitation element
     const clone = invitationElement.cloneNode(true);
     clone.style.position = "fixed";
-    clone.style.left = "-9999px"; // Hide the clone
+    clone.style.left = "-9999px";
     clone.style.width = `${invitationElement.offsetWidth}px`;
     clone.style.height = `${invitationElement.offsetHeight}px`;
     document.body.appendChild(clone);
 
-    // Convert inputs and textareas to divs
     const elements = clone.querySelectorAll("input, textarea");
     elements.forEach((element) => {
       const div = document.createElement("div");
@@ -376,7 +366,7 @@ const WeddingInvitation = () => {
                   const oldColor =
                     selectedElement.style.color || textStyle.color;
                   const newColor = e.target.value;
-                  selectedElement.style.color = newColor; // Apply color only to selected element
+                  selectedElement.style.color = newColor;
                   setTextStyle((prev) => ({
                     ...prev,
                     color: newColor,
@@ -386,7 +376,7 @@ const WeddingInvitation = () => {
                 }
               }}
               className="opacity-0 absolute w-8 h-8 cursor-pointer"
-              onClick={(e) => e.stopPropagation()} // Prevent color picker from closing
+              onClick={(e) => e.stopPropagation()}
             />
             <div
               className="w-4 h-4 rounded border border-gray-300"
@@ -541,7 +531,7 @@ const WeddingInvitation = () => {
     </div>
   );
 
-  // Add new function to update preview
+  // update preview
   const updatePreview = () => {
     const invitationElement = document.querySelector(
       ".max-w-md.mx-auto.bg-white"
@@ -643,7 +633,6 @@ const WeddingInvitation = () => {
 
             {showDownloadMenu && (
               <div className="fixed inset-0 flex" style={{ zIndex: 1000 }}>
-                {/* Backdrop */}
                 <div
                   className="fixed inset-0 bg-black bg-opacity-25"
                   onClick={() => setShowDownloadMenu(false)}
@@ -712,10 +701,6 @@ const WeddingInvitation = () => {
             src={selectedBackground}
             alt="Wedding Invitation Background"
             className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.src = defaultBackground;
-              console.warn('Failed to load background image, using default');
-            }}
           />
           <textarea
             defaultValue="PLEASE JOIN US AT OUR WEDDING"
