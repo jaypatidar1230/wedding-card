@@ -10,11 +10,13 @@ import {
   FaAlignCenter,
   FaAlignRight,
 } from "react-icons/fa";
-import floral from "../assets/floral.png";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { IoImageOutline } from "react-icons/io5";
 import { IoColorPaletteOutline } from "react-icons/io5";
+
+// Add a default background URL or base64 image
+const defaultBackground = "/images/floral.png";
 
 const WeddingInvitation = () => {
   const [fontSize, setFontSize] = useState("12.1");
@@ -37,12 +39,12 @@ const WeddingInvitation = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [showDownloadMenu, setShowDownloadMenu] = useState(false);
   const [showBgMenu, setShowBgMenu] = useState(false);
-  const [selectedBackground, setSelectedBackground] = useState(floral);
+  const [selectedBackground, setSelectedBackground] = useState(defaultBackground);
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [showFontDropdown, setShowFontDropdown] = useState(false);
 
-  const backgroundOptions = [{ name: "Floral", image: floral }];
+  const backgroundOptions = [{ name: "Default", image: defaultBackground }];
 
   const handleFocus = (e) => {
     const element = e.target;
@@ -710,6 +712,10 @@ const WeddingInvitation = () => {
             src={selectedBackground}
             alt="Wedding Invitation Background"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.src = defaultBackground;
+              console.warn('Failed to load background image, using default');
+            }}
           />
           <textarea
             defaultValue="PLEASE JOIN US AT OUR WEDDING"
